@@ -1,0 +1,57 @@
+.craft-form-list-table .list-tool {
+	width: 100px;
+}
+/* #craftform-blueprint-form { */
+/* 	text-align: center; */
+/* } */
+#craftform-blueprint-form table {
+	text-align: left;
+}
+#CraftFormFormAdminAddForm textarea,
+#CraftFormFormAdminEditForm textarea {
+	margin-bottom: 20px;
+	width: 95%;
+	height: 400px;
+}
+#CraftFormFormAdminAddForm input[type="text"],
+#CraftFormFormAdminEditForm input[type="text"] {
+	width: 500px;
+}
+input[type="text"]#CraftFormFormSendLimitTime, input[type="text"]#CraftFormFormSendLimitTimes {
+	width: 30px;
+}
+.craft-form-short-code {
+	width: 300px;
+	padding: 5px;
+	background: #f3f3f3;
+	border: 1px solid #aaa;
+}
+
+/* rule */
+.craft-form-rule-select-list {
+	margin-bottom: 5px;
+	list-style-type: none;
+}
+.craft-form-rule-select-list:last-of-type {
+	margin-bottom: 20px;
+}
+.craft-form-rule-select-list li {
+	margin: 0 0 2px 0;
+	padding: 3px 5px;
+	display: inline-block;
+	cursor: pointer;
+	border: solid 1px #DDD;
+	background: none;
+	min-width: 130px;
+	user-select: none;
+}
+.craft-form-rule-select-list .craft-form-rule-select-label {
+	cursor: default;
+	background: #EFEFEF;
+}
+.form-table.craft-form-rule-table {
+	margin: 0 0 20px ;
+}
+.craft-form-rule-table tr {
+	display: none;
+}

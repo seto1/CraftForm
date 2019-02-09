@@ -1,0 +1,4 @@
+id,title,name,type,options,message,created,modified
+1,送信制限: 送信回数,sendLimitTimes,sendLimitTimes,"{""sendLimitTime"":""10"",""sendLimitTimes"":""3""}",時間をおいてから送信してください。,,
+2,バリデーション: 必須,required,validateRequired,,この項目は入力必須です。,,
+3,バリデーション: 100文字制限,length100,validateLength,"{""minLength"":"""",""maxLength"":""100""}",100文字以内で入力してください。,,

@@ -1,0 +1,5 @@
+id,url,title,blueprint_input,blueprint_admin_mail,mail_title,mail_to,mail_cc,mail_bcc,mail_from,mail_from_name,form_rule,message_success,message_failed,message_validation_error,message_disabled,status,created,modified
+1,"",サンプルフォーム,"<div><label>名前</label><br>[text name=""name"" rule=""required""]</div>
+<div><label>本文</label><br>[textarea name=""message"" rule=""required,length100""]</div>
+<div><label>お問い合わせ内容</label><br>[select name=""type"" choice=""ご意見,ご質問""]</div>
+<div>[submit]</div>","",サンプルメールタイトル,"","","","","",sendLimitTimes,"","","","",1,,
