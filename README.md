@@ -1,0 +1,2 @@
+# CraftForm
+baserCMSのメールプラグインです。
