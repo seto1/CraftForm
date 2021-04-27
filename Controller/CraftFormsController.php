@@ -29,8 +29,7 @@ class CraftFormsController extends AppController {
 		$formId = $requestData['formId'];
 		$formUrl = $requestData['formUrl'];
 
-		unset($requestData['formId']);
-		unset($requestData['formUrl']);
+		unset($requestData['formId'], $requestData['formUrl']);
 
 		$form = $this->CraftFormForm->find('first', [
 			'conditions' => [
@@ -64,10 +63,12 @@ class CraftFormsController extends AppController {
 		list($requestData, $sendOptions) = $this->dispatchBeforeSendEvent($requestData);
 
 		// DB保存
-		$requestOptions['ip'] = $this->request->clientIP();
-		$requestOptions['userAgent'] = $this->request->header('User-Agent');
-		$requestOptions['formId'] = $formId;
-		$requestOptions['formUrl'] = $formUrl;
+		$requestOptions = [
+			'ip' => $this->request->clientIP(),
+			'userAgent' => $this->request->header('User-Agent'),
+			'formId' => $formId,
+			'formUrl' => $formUrl
+		];
 		$this->saveMail($requestData, $fields, $requestOptions);
 
 		$sendOptions = array_merge(
@@ -79,7 +80,10 @@ class CraftFormsController extends AppController {
 				'from' => $form['CraftFormForm']['mail_from'],
 				'fromName' => $form['CraftFormForm']['mail_from_name'],
 				'title' => $form['CraftFormForm']['mail_title'],
-				'message' => $this->convertToMailMessage($requestData, $requestOptions),
+				'message' => $this->convertToMailMessage(
+					$requestData,
+					$requestOptions
+				),
 			],
 			$sendOptions
 		);
@@ -103,8 +107,6 @@ class CraftFormsController extends AppController {
 
 		// event afterSend
 		$this->dispatchAfterSendEvent($requestData, $sendOptions);
-
-		return;
 	}
 
 	// フォームから送信されたリクエストを取得
@@ -114,13 +116,11 @@ class CraftFormsController extends AppController {
 				return $requestData;
 			}
 		}
-
-		$response = [
-			'status' => 'failed',
-			'error' => 'empty',
-		];
 		$this->set([
-			'response' => $response,
+			'response' => [
+				'status' => 'failed',
+				'error' => 'empty',
+			],
 			'_serialize' => ['response'],
 		]);
 
@@ -151,26 +151,29 @@ class CraftFormsController extends AppController {
 
 	// メールを送信
 	private function send($options) {
-		return $this->sendMail($options['to'], $options['title'], $options['message'], $options);
+		return $this->sendMail(
+			$options['to'],
+			$options['title'],
+			$options['message'],
+			$options
+		);
 	}
 
 	// メールの本文を作成
 	private function convertToMailMessage($requestData, $options) {
-		$message = '';
+		$message = [];
 		foreach ($requestData as $key => $var) {
-			$message .= "□{$key}\n";
-			$message .= "{$var}\n\n";
+			$message[] = "□{$key}";
+			$message[] = "{$var}\n";
 		}
 
-		$message .= "----------\n\n";
+		$message[] = "----------\n";
 
-		$message .= "□送信元\n{$options['formUrl']}\n\n";
-		$message .= "□IP\n{$options['ip']}\n\n";
-		$message .= "□UA\n{$options['userAgent']}";
+		$message[] = "□送信元\n{$options['formUrl']}\n";
+		$message[] = "□IP\n{$options['ip']}\n";
+		$message[] = "□UA\n{$options['userAgent']}";
 
-		$message = trim($message);
-
-		return $message;
+		return trim(implode("\n", $message));
 	}
 
 	// メールをDBに保存
@@ -183,43 +186,32 @@ class CraftFormsController extends AppController {
 		];
 
 		$saveData['CraftFormMailField'] = [];
-
 		$order = 0;
 		foreach ($fields as $fieldName => $field) {
 			$order++;
-
 			if (! isset($requestData[$fieldName])) {
 				continue;
 			}
-
 			$fieldData = [];
-
 			$fieldData['name'] = $fieldName;
-
 			if (! empty($field['title'])) {
 				$fieldData['title'] = $field['title'];
 			}
-
 			$fieldData['value'] = $requestData[$fieldName];
-
 			$fieldData['order'] = $order;
-
 			$saveData['CraftFormMailField'][] = $fieldData;
 		}
 
 		// モデルに書いたバインドが読み込まれていない場合があるので再度バインド
-		$this->CraftFormMail->bindModel(
-			[
-				'hasMany' => [
-					'CraftFormMailField' => [
-						'className' => 'CraftForm.CraftFormMailField',
-						'foreignKey' => 'mail_id',
-						'dependent' => true,
-					],
+		$this->CraftFormMail->bindModel([
+			'hasMany' => [
+				'CraftFormMailField' => [
+					'className' => 'CraftForm.CraftFormMailField',
+					'foreignKey' => 'mail_id',
+					'dependent' => true,
 				],
-			]
-		);
-
+			],
+		]);
 		$this->CraftFormMail->saveAssociated($saveData);
 	}
 
@@ -228,19 +220,19 @@ class CraftFormsController extends AppController {
 		$event = $this->dispatchEvent('beforeSend', [
 			'data' => $requestData
 		]);
-		$sendOptions = [];
-		if ($event !== false) {
-			if ($event->result === true) {
-				$requestData = $event->data['data'];
-			} else {
-				$requestData = $event->result;
-			}
-			if (! empty($event->data['sendOptions'])) {
-				$sendOptions = $event->data['sendOptions'];
-			}
+		if ($event === false) {
+			return [$requestData, []];
 		}
 
-		return [$requestData, $sendOptions];
+		if ($event->result === true) {
+			$requestData = $event->data['data'];
+		} else {
+			$requestData = $event->result;
+		}
+		if (empty($event->data['sendOptions'])) {
+			return [$requestData, []];
+		}
+		return [$requestData, $event->data['sendOptions']];
 	}
 
 	// afterSendイベント発火
@@ -258,51 +250,59 @@ class CraftFormsController extends AppController {
 	}
 
 	public function admin_add() {
-		if ($this->request->is('post') && ! empty($this->request->data['CraftFormForm'])) {
-			if ($this->CraftFormForm->save($this->request->data['CraftFormForm'])) {
-				$id = $this->CraftFormForm->getLastInsertId();
-				$this->redirect(['action' => 'edit', $id]);
-			}
+		if (!$this->request->data('CraftFormForm')) {
+			$this->render('form');
+			return;
+		}
+		if ($this->CraftFormForm->save($this->request->data['CraftFormForm'])) {
+			$this->redirect([
+				'action' => 'edit',
+				$this->CraftFormForm->getLastInsertId()
+			]);
+			return;
 		}
 		$this->render('form');
 	}
 
 	public function admin_edit($id) {
-		if ($this->request->is('put') && ! empty($this->request->data['CraftFormForm'])) {
-			if (isset($this->request->data['delete'])) {
-				$this->delete($this->request->data['CraftFormForm']['id']);
-			} else {
-				$this->edit($this->request->data);
-			}
-		} else {
+		if (!$this->request->is('put') || empty($this->request->data['CraftFormForm'])) {
 			$this->request->data = $this->CraftFormForm->findById($id);
-			if (! $this->request->data) {
+			if (!$this->request->data) {
 				$this->setMessage(__d('baser', '無効な処理です。'), true);
 				$this->redirect(['action' => 'index']);
 			}
+			$this->render('form');
+			return;
+		}
+		if (isset($this->request->data['delete'])) {
+			$this->delete($this->request->data['CraftFormForm']['id']);
+		} else {
+			$this->edit($this->request->data);
 		}
 		$this->render('form');
 	}
 
 	private function edit($data) {
-		if ($this->CraftFormForm->save($data)) {
-			clearViewCache();
-			$this->setMessage('フォームを更新しました。');
-			$this->redirect(['action' => 'edit', $data['CraftFormForm']['id']]);
-		} else {
+		if (!$this->CraftFormForm->save($data)) {
 			$this->setMessage('エラーが発生しました。内容を確認してください。', true);
+			return;
 		}
+		clearViewCache();
+		$this->setMessage('フォームを更新しました。');
+		$this->redirect([
+			'action' => 'edit',
+			$data['CraftFormForm']['id']
+		]);
 	}
 
 	private function delete($id) {
-		if ($this->CraftFormForm->delete($id)) {
-			clearViewCache();
-			$this->setMessage('フォームを削除しました。');
-		} else {
+		if (!$this->CraftFormForm->delete($id)) {
 			$this->setMessage('フォームの削除に失敗しました。', true);
+			$this->redirect('index');
+			return;
 		}
-
+		clearViewCache();
+		$this->setMessage('フォームを削除しました。');
 		$this->redirect('index');
 	}
-
 }
