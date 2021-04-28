@@ -103,7 +103,8 @@ class CraftFormRule extends AppModel {
 
 		// オプション以外のバリデーション
 		if (! $this->validates(['fieldList' => ['title', 'name', 'type', 'options', 'message']])
-			|| ! $this->validateMessage($data)) {
+			||
+			! $this->validateMessage($data)) {
 
 			return false;
 		}
@@ -142,24 +143,14 @@ class CraftFormRule extends AppModel {
 		foreach ($optionValues as $optionName => $option) {
 			$checkFields[] = $optionName;
 		}
-
-		if ($checkFields && ! $this->validates(['fieldList' => $checkFields])) {
-			return false;
-		}
-
-		return true;
+		return !$checkFields || $this->validates(['fieldList' => $checkFields]);
 	}
 
 	public function convertRuleRequestData($data, $options) {
-		$optionsJson = NULL;
-		if ($options) {
-			$optionsJson = json_encode($options, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-		}
-
 		return $data['CraftFormRules'] = [
 			'name' => $data['CraftFormRule']['name'],
 			'type' => $data['CraftFormRule']['type'],
-			'options' => $optionsJson,
+			'options' => $options ? json_encode($options, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : NULL,
 			'message' => $data['CraftFormRule']['message'],
 			'status' => 1,
 		];
@@ -187,13 +178,15 @@ class CraftFormRule extends AppModel {
 			$ruleOptions = json_decode($rule['CraftFormRule']['options'], true);
 
 			foreach ($formRules as $formRule) {
-				if ($rule['CraftFormRule']['name'] === $formRule) {
-					if (strpos($ruleType, 'sendLimit') === 0) {
-						if (! $this->$ruleType($ruleOptions)) {
-							$this->craftFormValidateErrors['__form'][] = $rule['CraftFormRule']['message'];
-							break 2;
-						}
-					}
+				if ($rule['CraftFormRule']['name'] !== $formRule) {
+					continue;
+				}
+				if (strpos($ruleType, 'sendLimit') !== 0) {
+					continue;
+				}
+				if (!$this->$ruleType($ruleOptions)) {
+					$this->craftFormValidateErrors['__form'][] = $rule['CraftFormRule']['message'];
+					break 2;
 				}
 			}
 		}
@@ -234,20 +227,21 @@ class CraftFormRule extends AppModel {
 
 				$ruleOptions = json_decode($rule['CraftFormRule']['options'], true);
 
-				if ($ruleName === $rule['CraftFormRule']['name']) {
-					if (strpos($ruleType, 'validate') === 0) {
-						if ($ruleType !== 'validateRequired' && ! $fieldValue) {
-							continue;
-						}
-						if (! $this->$ruleType($fieldValue, $ruleOptions)) {
-							$this->craftFormValidateErrors[$fieldName][] = $rule['CraftFormRule']['message'];
-							break 2;
-						}
-					} elseif (strpos($ruleType, 'convert') === 0) {
-						$fieldValue = $this->$ruleType($fieldValue, $ruleOptions);
-					}
-					break;
+				if ($ruleName !== $rule['CraftFormRule']['name']) {
+					continue;
 				}
+				if (strpos($ruleType, 'validate') === 0) {
+					if ($ruleType !== 'validateRequired' && !$fieldValue) {
+						continue;
+					}
+					if (!$this->$ruleType($fieldValue, $ruleOptions)) {
+						$this->craftFormValidateErrors[$fieldName][] = $rule['CraftFormRule']['message'];
+						break 2;
+					}
+				} elseif (strpos($ruleType, 'convert') === 0) {
+					$fieldValue = $this->$ruleType($fieldValue, $ruleOptions);
+				}
+				break;
 			}
 		}
 
@@ -275,12 +269,11 @@ class CraftFormRule extends AppModel {
 	// 送信制限: IP
 	private function sendLimitIP($options) {
 		$request = Router::getRequest();
-		$clientIp = $request->clientIp();
-
-		$ips = explode("\n", $options['sendLimitIP']);
-		$ips = array_map('trim', $ips);
-
-		return ! in_array($clientIp, $ips);
+		return !in_array(
+			$request->clientIp(),
+			array_map('trim', explode("\n", $options['sendLimitIP'])),
+			true
+		);
 	}
 
 	// バリデーション: 必須
@@ -304,11 +297,7 @@ class CraftFormRule extends AppModel {
 	// バリデーション: 文字数
 	private function validateLength($value, $options) {
 		$length = mb_strlen($value);
-		if ($length < $options['minLength'] || $length > $options['maxLength']) {
-			return false;
-		}
-
-		return true;
+		return $length >= $options['minLength'] && $length <= $options['maxLength'];
 	}
 
 	// バリデーション: 文字種
@@ -338,38 +327,29 @@ class CraftFormRule extends AppModel {
 
 	// バリデーション: 数値
 	private function validateRange($value, $options) {
-		if ($value < $options['min'] || $value > $options['max']) {
-			return false;
-		}
-
-		return true;
+		return $value >= $options['min'] && $value <= $options['max'];
 	}
 
 	// バリデーション: 日付
 	private function validateDate($value, $options) {
 		$valueTime = strtotime($value);
-		$sinceTime = strtotime($options['since']);
-		$untilTime = strtotime($options['until']);
-
-		if ($valueTime < $sinceTime || $valueTime > $untilTime) {
-			return false;
-		}
-
-		return true;
+		return $valueTime >= strtotime($options['since']) && $valueTime <= strtotime($options['until']);
 	}
 
 	// バリデーション: 正規表現
 	private function validateRegex($value, $options) {
-		$pattern = str_replace("\0", '', $options['regex']);
-
-		return preg_match("/{$pattern}/us", $value);
+		return preg_match(
+			'/' . str_replace("\0", '', $options['regex']) . '/us',
+			$value
+		);
 	}
 
 	// バリデーション: 正規表現 NGワード
 	private function validateNgRegex($value, $options) {
-		$pattern = str_replace("\0", '', $options['ngRegex']);
-
-		return ! preg_match("/{$pattern}/us", $value);
+		return ! preg_match(
+			'/' . str_replace("\0", '', $options['ngRegex']) . '/us',
+			$value
+		);
 	}
 
 	// 変換: カナ
@@ -389,10 +369,11 @@ class CraftFormRule extends AppModel {
 
 	// 変換:
 	private function convertRegex($value, $options) {
-		$pattern = str_replace("\0", '', $options['convertRegexPattern']);
-		$replacement = str_replace("\0", '', $options['convertRegexReplacement']);
-
-		return preg_replace("/{$pattern}/us", $replacement, $value);
+		return preg_replace(
+			'/' . str_replace("\0", '', $options['convertRegexPattern']) . '/us',
+			str_replace("\0", '', $options['convertRegexReplacement']),
+			$value
+		);
 	}
 
 	// 変換:

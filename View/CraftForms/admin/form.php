@@ -15,10 +15,18 @@ $(document).ready(function(){
 <?php echo $this->BcForm->create('CraftForm.CraftFormForm') ?>
 
 	<?php if ($this->action === 'admin_edit'): ?>
-		<table cellpadding="0" cellspacing="0" class="form-table">
+		<table class="form-table">
+			<tr>
 				<th>ショートコード</th>
 				<td>
-					<input type="text" class="craft-form-short-code" value="[CraftForm.getForm <?php echo $this->request->data['CraftFormForm']['id'] ?>]" readonly><br>
+					<label>
+						<input
+							type="text"
+							class="craft-form-short-code"
+							value="[CraftForm.getForm <?php echo $this->request->data['CraftFormForm']['id'] ?>]"
+							readonly
+						>
+					</label><br>
 					<small>固定ページやブログに貼り付けるとフォームが表示されます。</small>
 				</td>
 			</tr>
@@ -26,7 +34,7 @@ $(document).ready(function(){
 	<?php endif ?>
 
 	□フォーム設定
-	<table cellpadding="0" cellspacing="0" class="form-table">
+	<table class="form-table">
 		<tr>
 			<th class="col-head">
 				<?php echo $this->BcForm->label('CraftFormForm.title', 'タイトル') ?>
@@ -113,14 +121,21 @@ $(document).ready(function(){
 				<?php echo $this->BcForm->label('CraftFormForm.status', '公開状態') ?>
 			</th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('CraftFormForm.status', ['type' => 'radio', 'options' => [0 => '非公開', 1 => '公開'], 'default' => 1]) ?>
+				<?php echo $this->BcForm->input(
+					'CraftFormForm.status',
+					[
+						'type' => 'radio',
+						'options' => [0 => '非公開', 1 => '公開'],
+						'default' => 1
+					]
+				) ?>
 				<?php echo $this->BcForm->error('CraftFormForm.status') ?>
 			</td>
 		</tr>
 	</table>
 
 	<div>□メッセージ</div>
-	<table cellpadding="0" cellspacing="0" class="form-table">
+	<table class="form-table">
 		<tr>
 			<th class="col-head">
 				<?php echo $this->BcForm->label('CraftFormForm.message_success', '送信完了時') ?>
@@ -154,9 +169,15 @@ $(document).ready(function(){
 
 	<div class="submit">
 		<?php $this->BcBaser->link('一覧に戻る', ['action' => 'index'], ['class' => 'button']) ?>
-		<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave', 'name' => 'save']) ?>
+		<?php echo $this->BcForm->submit(
+			'保存',
+			['div' => false, 'class' => 'button', 'id' => 'BtnSave', 'name' => 'save']
+		) ?>
 		<?php if ($this->action === 'admin_edit'): ?>
-			<?php echo $this->BcForm->submit('削除', ['div' => false, 'class' => 'button', 'id' => 'BtnDelete', 'name' => 'delete']) ?>
+			<?php echo $this->BcForm->submit(
+				'削除',
+				['div' => false, 'class' => 'button', 'id' => 'BtnDelete', 'name' => 'delete']
+			) ?>
 		<?php endif ?>
 	</div>
 

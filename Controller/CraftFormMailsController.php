@@ -23,40 +23,50 @@ class CraftFormMailsController extends AppController {
 	}
 
 	public function admin_add() {
-		if ($this->request->is('post') && ! empty($this->request->data['CraftFormMail'])) {
-			if ($this->CraftFormMail->save($this->request->data['CraftFormMail'])) {
-				$id = $this->CraftFormMail->getLastInsertId();
-				$this->redirect(['action' => 'edit', $id]);
-			}
+		if (!$this->request->data('CraftFormMail')) {
+			$this->render('form');
+			return;
 		}
-		$this->render('form');
+
+		if (!$this->CraftFormMail->save($this->request->data('CraftFormMail'))) {
+			$this->render('form');
+			return;
+		}
+
+		$this->redirect(
+			[
+				'action' => 'edit',
+				$this->CraftFormMail->getLastInsertId()
+			]
+		);
 	}
 
 	public function admin_edit($id) {
-		if ($this->request->is('post') && ! empty($this->request->data['CraftFormMail'])) {
+		if (!empty($this->request->data('CraftFormMail'))) {
 			if (isset($this->request->data['delete'])) {
-				$this->delete($this->request->data['CraftFormMail']['id']);
+				$this->delete($this->request->data('CraftFormMail.id'));
 			}
-		} else {
-			$mail = $this->CraftFormMail->read(null, $id);
-			if (! $mail) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
-				$this->redirect(['action' => 'index']);
-			}
+			$this->render('form');
+			return;
 		}
 
+		$mail = $this->CraftFormMail->read(null, $id);
+		if (!$mail) {
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->redirect(['action' => 'index']);
+			return;
+		}
 		$this->set('mail', $mail);
 		$this->render('form');
 	}
 
 	private function delete($id) {
-		if ($this->CraftFormMail->delete($id)) {
+		if (!$this->CraftFormMail->delete($id)) {
+			$this->setMessage('フォームの削除に失敗しました。', true);
+		} else {
 			clearViewCache();
 			$this->setMessage('フォームを削除しました。');
-		} else {
-			$this->setMessage('フォームの削除に失敗しました。', true);
 		}
-
 		$this->redirect('index');
 	}
 
@@ -66,10 +76,8 @@ class CraftFormMailsController extends AppController {
 			foreach ($mail['CraftFormMailField'] as &$mailField) {
 				$values[] = $mailField['value'];
 			}
-			$message = implode(',', $values);
-			$mail['CraftFormMail']['message'] = $message;
+			$mail['CraftFormMail']['message'] = implode(',', $values);
 		}
-
 		return $mails;
 	}
 }

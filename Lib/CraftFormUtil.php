@@ -8,10 +8,15 @@ class CraftFormUtil {
 
 		$formData = $BcForm->create('CraftForm' . $formId, [
 			'id' => 'CraftForm_' . $formId,
-			'url' => ['plugin' => 'craft_form', 'controller' => 'craft_forms', 'action' => 'submit'],
+			'url' => [
+				'plugin' => 'craft_form',
+				'controller' => 'craft_forms',
+				'action' => 'submit'
+			],
 		]);
 
-		$formData .= preg_replace_callback('/\[[\w-]+.*\]/',
+		$formData .= preg_replace_callback(
+			'/\[[\w-]+.*]/',
 			function ($match) use ($BcForm) {
 				preg_match('/\A\[([\w-]+)/i', $match[0], $matchFieldType);
 				if (! $matchFieldType) {
@@ -32,10 +37,7 @@ class CraftFormUtil {
 				} elseif ($attributes['type'] !== 'submit') {
 					return $match[0];
 				}
-				unset($attributes['name']);
-
-				unset($attributes['rule']);
-
+				unset($attributes['name'], $attributes['rule']);
 				if (empty($attributes['div'])) {
 					$attributes['div'] = false;
 				}
@@ -74,7 +76,12 @@ class CraftFormUtil {
 		);
 
 		$formData .= $BcForm->hidden('formId', ['value' => $formId]);
-		$currentUrl = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$currentUrl = sprintf(
+			"%s%s%s",
+			empty($_SERVER['HTTPS']) ? 'http://' : 'https://',
+			$_SERVER['HTTP_HOST'],
+			$_SERVER['REQUEST_URI']
+		);
 		$formData .= $BcForm->hidden('formUrl', ['value' => $currentUrl]);
 
 		$formData .= $BcForm->end();
@@ -83,16 +90,13 @@ class CraftFormUtil {
 	}
 
 	static public function converToArray($form) {
-		preg_match_all('/\[[\w-]+.*\]/', $form['CraftFormForm']['blueprint_input'], $matches);
-
+		preg_match_all('/\[[\w-]+.*]/', $form['CraftFormForm']['blueprint_input'], $matches);
 		$fields = [];
-
 		foreach ($matches[0] as $match) {
 			preg_match('/\A\[([\w-]+)/i', $match, $matchFieldType);
 			if (! $matchFieldType) {
 				return false;
 			}
-
 
 			preg_match_all('/ ([\w-]+)="([^"]+)"/i', $match, $matchFieldAttributes, PREG_SET_ORDER);
 			$attributes = [];
@@ -111,10 +115,8 @@ class CraftFormUtil {
 			}
 
 			$fields[$attributes['name']] = $attributes;
-
 			unset($fields[$attributes['name']]['name']);
 		}
-
 		return $fields;
 	}
 }

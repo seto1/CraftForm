@@ -2,28 +2,33 @@
 
 class CraftFormHelper extends AppHelper {
 	public $helpers = ['BcBaser'];
-
 	public function getForm($id) {
-		$CraftFormForm = ClassRegistry::init('CraftForm.CraftFormForm');
-		$form = $CraftFormForm->find('first', [
+		$obj = ClassRegistry::init('CraftForm.CraftFormForm');
+		$form = $obj->find('first', [
 			'conditions' => [
 				'CraftFormForm.id' => $id,
 				'CraftFormForm.status' => 1,
 			],
 		]);
 
-		if ($form) {
-			$this->BcBaser->js([
+		if (!$form) {
+			return '';
+		}
+
+		$this->BcBaser->js(
+			[
 				'CraftForm.jquery.craftForm',
 				'CraftForm.craft_form',
-			], false);
+			],
+			false
+		);
 
-			$result = CraftFormUtil::converToArray($form);
-			//exit;
+//			$result = CraftFormUtil::converToArray($form);
+		//exit;
 
-			$result = CraftFormUtil::convertToForm($form);
+		$result = CraftFormUtil::convertToForm($form);
 
-			$result .= <<< EOF
+		$result .= <<< EOF
 <script>
 $.craftForm.init({
 	baseUrl: '{$this->request->base}',
@@ -34,9 +39,7 @@ $.craftForm.init({
 });
 </script>
 EOF;
-
-			return $result;
-		}
+		return $result;
 	}
 
 }

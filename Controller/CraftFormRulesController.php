@@ -16,55 +16,61 @@ class CraftFormRulesController extends AppController {
 		$forms = $this->CraftFormRule->find('all', [
 			'order' => 'title asc',
 		]);
-
 		$this->set('forms', $forms);
 	}
 
 	public function admin_add() {
-		if ($this->request->is('post') && ! empty($this->request->data['CraftFormRule'])) {
-			try {
-				if (! $this->CraftFormRule->validatesData($this->request->data)) {
-					throw new Exception('バリデーションエラー');
-				}
-
-				$ruleOptions = $this->CraftFormRule->convertRuleOptions($this->request->data);
-				$data = $this->CraftFormRule->convertRuleRequestData($this->request->data, $ruleOptions);
-
-				if ($this->CraftFormRule->save($data)) {
-					clearViewCache();
-					$this->setMessage('ルールを追加しました。');
-					$id = $this->CraftFormRule->getLastInsertId();
-					$this->redirect(['action' => 'edit', $id]);
-				}
-			} catch (Exception $e) {
-				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
+		if (!$this->request->data('CraftFormRule')) {
+			$this->render('form');
+			return;
+		}
+		try {
+			if (!$this->CraftFormRule->validatesData($this->request->data)) {
+				throw new Exception('バリデーションエラー');
 			}
+			$data = $this->CraftFormRule->convertRuleRequestData(
+				$this->request->data,
+				$this->CraftFormRule->convertRuleOptions($this->request->data)
+			);
+			if ($this->CraftFormRule->save($data)) {
+				clearViewCache();
+				$this->setMessage('ルールを追加しました。');
+				$this->redirect([
+					'action' => 'edit',
+					$this->CraftFormRule->getLastInsertId()
+				]);
+			}
+		} catch (Exception $e) {
+			$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 		}
 		$this->render('form');
 	}
 
 	public function admin_edit($id) {
 		if ($this->request->is('put') && ! empty($this->request->data['CraftFormRule'])) {
-			if (isset($this->request->data['delete'])) {
-				$this->delete($this->request->data['CraftFormRule']['id']);
-			} else {
+			if (!isset($this->request->data['delete'])) {
 				$this->edit($this->request->data);
+			} else {
+				$this->delete(
+					$this->request->data['CraftFormRule']['id']
+				);
 			}
-		} else {
-			$this->request->data = $this->CraftFormRule->findById($id);
-			if (! $this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
-				$this->redirect(['action' => 'index']);
-			}
-
-			$options = json_decode($this->request->data['CraftFormRule']['options'], true);
-			if (is_array($options)) {
-				$this->request->data['CraftFormRule'] = array_merge($this->request->data['CraftFormRule'], $options);
-			}
+			$this->render('form');
+			return;
+		}
+		$this->request->data = $this->CraftFormRule->findById($id);
+		if (! $this->request->data) {
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->redirect(['action' => 'index']);
 		}
 
-		
-
+		$options = json_decode($this->request->data['CraftFormRule']['options'], true);
+		if (is_array($options)) {
+			$this->request->data['CraftFormRule'] = array_merge(
+				$this->request->data['CraftFormRule'],
+				$options
+			);
+		}
 		$this->render('form');
 	}
 
@@ -74,8 +80,12 @@ class CraftFormRulesController extends AppController {
 				throw new Exception('バリデーションエラー');
 			}
 
-			$ruleOptions = $this->CraftFormRule->convertRuleOptions($this->request->data);
-			$data = $this->CraftFormRule->convertRuleRequestData($this->request->data, $ruleOptions);
+			$data = $this->CraftFormRule->convertRuleRequestData(
+				$this->request->data,
+				$this->CraftFormRule->convertRuleOptions(
+					$this->request->data
+				)
+			);
 
 			if ($this->CraftFormRule->save($data, false)) {
 				clearViewCache();
@@ -88,14 +98,13 @@ class CraftFormRulesController extends AppController {
 	}
 
 	private function delete($id) {
-		if ($this->CraftFormRule->delete($id)) {
-			clearViewCache();
-			$this->setMessage('ルールを削除しました。');
-		} else {
+		if (!$this->CraftFormRule->delete($id)) {
 			$this->setMessage('ルールの削除に失敗しました。', true);
+			$this->redirect('index');
+			return;
 		}
-
+		clearViewCache();
+		$this->setMessage('ルールを削除しました。');
 		$this->redirect('index');
 	}
-
 }
