@@ -1,4 +1,4 @@
-<?= $this->BcBaser->css('CraftForm.admin/style') ?>
+<?php echo $this->BcBaser->css('CraftForm.admin/style') ?>
 <script type="text/javascript">
 $(function(){
 	$('#BtnDelete').click(function() {
@@ -13,10 +13,10 @@ $(function(){
 	<?php foreach ($mail['CraftFormMailField'] as $mailField): ?>
 		<tr>
 			<th class="col-head">
-				<?= h($mailField['name']) ?>
+				<?php echo h($mailField['name']) ?>
 			</th>
 			<td class="col-input">
-				<?= nl2br(h($mailField['value'])) ?>
+				<?php echo nl2br(h($mailField['value'])) ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -27,7 +27,7 @@ $(function(){
 				IP
 			</th>
 			<td class="col-input">
-				<?= h($mail['CraftFormMail']['ip']) ?>
+				<?php echo h($mail['CraftFormMail']['ip']) ?>
 			</td>
 		</tr>
 		<tr>
@@ -35,7 +35,7 @@ $(function(){
 				ユーザーエージェント
 			</th>
 			<td class="col-input">
-				<?= h($mail['CraftFormMail']['user_agent']) ?>
+				<?php echo h($mail['CraftFormMail']['user_agent']) ?>
 			</td>
 		</tr>
 		<tr>
@@ -43,12 +43,12 @@ $(function(){
 				受信日時
 			</th>
 			<td class="col-input">
-				<?= h($mail['CraftFormMail']['created']) ?>
+				<?php echo h($mail['CraftFormMail']['created']) ?>
 			</td>
 		</tr>
 	</table>
-	<?= $this->BcForm->create('CraftForm.CraftFormMailField') ?>
-		<?= $this->BcForm->input(
+	<?php echo $this->BcForm->create('CraftForm.CraftFormMailField') ?>
+		<?php echo $this->BcForm->input(
 			'CraftFormMail.id', [
 				'type' => 'hidden',
 				'value' => $mail['CraftFormMail']['id']
@@ -63,11 +63,11 @@ $(function(){
 					'class' => 'button'
 				]
 			) ?>
-			<?= $this->BcForm->submit(
+			<?php echo $this->BcForm->submit(
 				'削除', [
 					'div' => false, 'class' => 'button', 'id' => 'BtnDelete', 'name' => 'delete'
 				]
 			) ?>
 		</div>
-	<?= $this->BcForm->end() ?>
+	<?php echo $this->BcForm->end() ?>
 </div>

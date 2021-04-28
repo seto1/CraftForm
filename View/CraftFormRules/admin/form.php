@@ -1,5 +1,5 @@
-<?= $this->BcBaser->css('CraftForm.admin/style') ?>
-<?= $this->BcBaser->js('CraftForm.admin/field_rule') ?>
+<?php echo $this->BcBaser->css('CraftForm.admin/style') ?>
+<?php echo $this->BcBaser->js('CraftForm.admin/field_rule') ?>
 <script type="text/javascript">
 $(function(){
 	$('#BtnDelete').click(function() {
@@ -10,15 +10,15 @@ $(function(){
 });
 </script>
 <div id="craftform-validation-form">
-<?= $this->BcForm->create('CraftForm.CraftFormRule') ?>
+<?php echo $this->BcForm->create('CraftForm.CraftFormRule') ?>
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
 			<th class="col-head">
 				ルールタイトル <span class="required">*</span>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('title', ['size' => 50]) ?>
-				<?= $this->BcForm->error('title') ?>
+				<?php echo $this->BcForm->input('title', ['size' => 50]) ?>
+				<?php echo $this->BcForm->error('title') ?>
 			</td>
 		</tr>
 		<tr>
@@ -26,14 +26,14 @@ $(function(){
 				ルール名 <span class="required">*</span>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('name', ['size' => 25]) ?>
+				<?php echo $this->BcForm->input('name', ['size' => 25]) ?>
 				<small>※半角英数で入力してください</small>
-				<?= $this->BcForm->error('name') ?>
+				<?php echo $this->BcForm->error('name') ?>
 			</td>
 		</tr>
 	</table>
 
-	<?= $this->BcForm->error('type') ?>
+	<?php echo $this->BcForm->error('type') ?>
 	<ul class="craft-form-rule-select-list">
 		<li class="craft-form-rule-select-label">入力値チェック</li>
 		<li class="craft-form-rule-select" data-craftFormSelectRule="validateRequired">必須確認</li>
@@ -70,26 +70,26 @@ $(function(){
 		<tr class="mailfield-rules-validateEqualTo">
 			<th>一致確認</th>
 			<td>
-				<?= $this->BcForm->input('equalTo', ['size' => 20]) ?>
-				<?= $this->BcForm->error('equalTo') ?><br>
+				<?php echo $this->BcForm->input('equalTo', ['size' => 20]) ?>
+				<?php echo $this->BcForm->error('equalTo') ?><br>
 				<small>指定したフィールドと値が一致するかチェックします。</small>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-validateLength">
 			<th>文字数</th>
 			<td>
-				<?= $this->BcForm->input('minLength', ['size' => 1]) ?>
+				<?php echo $this->BcForm->input('minLength', ['size' => 1]) ?>
 				文字
-				<?= $this->BcForm->error('minLength') ?>
+				<?php echo $this->BcForm->error('minLength') ?>
 				～
-				<?= $this->BcForm->input('maxLength', ['size' => 1]) ?>
-				文字<?= $this->BcForm->error('maxLength') ?><br>
+				<?php echo $this->BcForm->input('maxLength', ['size' => 1]) ?>
+				文字<?php echo $this->BcForm->error('maxLength') ?><br>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-validateCharacterType">
 			<th>文字種</th>
 			<td>
-				<?= $this->BcForm->input(
+				<?php echo $this->BcForm->input(
 					'characterType', [
 					'type' => 'select',
 					'multiple' => 'checkbox',
@@ -105,28 +105,28 @@ $(function(){
 						'upperCase' => '英字大文字',
 					]
 				]) ?>
-				<?= $this->BcForm->error('characterType') ?>
+				<?php echo $this->BcForm->error('characterType') ?>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-validateRange">
 			<th>数値</th>
 			<td>
-				<?= $this->BcForm->input('min', ['size' => 1]) ?>
-				<?= $this->BcForm->error('min') ?>
+				<?php echo $this->BcForm->input('min', ['size' => 1]) ?>
+				<?php echo $this->BcForm->error('min') ?>
 				～
-				<?= $this->BcForm->input('max', ['size' => 1]) ?>
-				<?= $this->BcForm->error('max') ?><br>
+				<?php echo $this->BcForm->input('max', ['size' => 1]) ?>
+				<?php echo $this->BcForm->error('max') ?><br>
 				<small>指定した範囲の数値であることをチェックします。</small>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-validateDate">
 			<th>日付</th>
 			<td>
-				<?= $this->BcForm->input('since', ['size' => 7]) ?>
-				<?= $this->BcForm->error('since') ?>
+				<?php echo $this->BcForm->input('since', ['size' => 7]) ?>
+				<?php echo $this->BcForm->error('since') ?>
 				～
-				<?= $this->BcForm->input('until', ['size' => 7]) ?>
-				<?= $this->BcForm->error('until') ?><br>
+				<?php echo $this->BcForm->input('until', ['size' => 7]) ?>
+				<?php echo $this->BcForm->error('until') ?><br>
 				<small>指定した期間内の日付であることをチェックします。</small>
 			</td>
 		</tr>
@@ -134,25 +134,25 @@ $(function(){
 			<th>正規表現</th>
 			<td>
 				/
-				<?= $this->BcForm->input('regex', ['size' => 50]) ?>
+				<?php echo $this->BcForm->input('regex', ['size' => 50]) ?>
 				/us
-				<?= $this->BcForm->error('regex') ?><br>
+				<?php echo $this->BcForm->error('regex') ?><br>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-validateNgRegex">
 			<th>正規表現（NGワード）</th>
 			<td>
 				/
-				<?= $this->BcForm->input('ngRegex', ['size' => 50]) ?>
+				<?php echo $this->BcForm->input('ngRegex', ['size' => 50]) ?>
 				/us
-				<?= $this->BcForm->error('noRegex') ?><br>
+				<?php echo $this->BcForm->error('noRegex') ?><br>
 				<small>一致する場合にエラーが表示されます。</small>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-convertKana">
 			<th>半角 ⇔ 全角</th>
 			<td>
-				<?= $this->BcForm->input('convertKanaOption', ['size' => 10]) ?><br>
+				<?php echo $this->BcForm->input('convertKanaOption', ['size' => 10]) ?><br>
 				<small><a
 						href="http://php.net/manual/ja/function.mb-convert-kana.php"
 						target=_blank
@@ -177,19 +177,19 @@ $(function(){
 			<th>正規表現</th>
 			<td>
 				from /
-				<?= $this->BcForm->input('convertRegexPattern', ['size' => 50]) ?>
+				<?php echo $this->BcForm->input('convertRegexPattern', ['size' => 50]) ?>
 				/us
-				<?= $this->BcForm->error('convertRegexPattern') ?><br>
+				<?php echo $this->BcForm->error('convertRegexPattern') ?><br>
 				to
-				<?= $this->BcForm->input('convertRegexReplacement', ['size' => 50]) ?>
-				<?= $this->BcForm->error('convertRegexReplacement') ?><br>
+				<?php echo $this->BcForm->input('convertRegexReplacement', ['size' => 50]) ?>
+				<?php echo $this->BcForm->error('convertRegexReplacement') ?><br>
 			</td>
 		</tr>
 		<tr class="mailfield-rules-convertDate">
 			<th>日付</th>
 			<td>
-				<?= $this->BcForm->input('convertDateOption', ['size' => 10]) ?>
-				<?= $this->BcForm->error('convertDateOption') ?><br>
+				<?php echo $this->BcForm->input('convertDateOption', ['size' => 10]) ?>
+				<?php echo $this->BcForm->error('convertDateOption') ?><br>
 				<small><a
 						href="http://php.net/manual/ja/function.date.php"
 						target=_blank
@@ -199,19 +199,19 @@ $(function(){
 		<tr class="mailfield-rules-sendLimitTimes">
 			<th>連続送信制限</th>
 			<td>
-				<?= $this->BcForm->input('sendLimitTime', ['size' => 5]) ?>
-				<?= $this->BcForm->error('sendLimitTime') ?>
+				<?php echo $this->BcForm->input('sendLimitTime', ['size' => 5]) ?>
+				<?php echo $this->BcForm->error('sendLimitTime') ?>
 				分に
-				<?= $this->BcForm->input('sendLimitTimes', ['size' => 5]) ?>
-				<?= $this->BcForm->error('sendLimitTimes') ?>
+				<?php echo $this->BcForm->input('sendLimitTimes', ['size' => 5]) ?>
+				<?php echo $this->BcForm->error('sendLimitTimes') ?>
 				回まで送信を許可する
 			</td>
 		</tr>
 		<tr class="mailfield-rules-sendLimitIP">
 			<th>IP制限</th>
 			<td>
-				<?= $this->BcForm->input('sendLimitIP', ['type' => 'textarea']) ?>
-				<?= $this->BcForm->error('sendLimitIP') ?><br>
+				<?php echo $this->BcForm->input('sendLimitIP', ['type' => 'textarea']) ?>
+				<?php echo $this->BcForm->error('sendLimitIP') ?><br>
 				<small>一行にひとつずつIPを入力してください。</small>
 			</td>
 		</tr>
@@ -221,28 +221,28 @@ $(function(){
 		<tr>
 			<th>エラーメッセージ</th>
 			<td>
-				<?= $this->BcForm->input('message', ['type' => 'text', 'size' => 50]) ?>
-				<?= $this->BcForm->error('message') ?><br>
+				<?php echo $this->BcForm->input('message', ['type' => 'text', 'size' => 50]) ?>
+				<?php echo $this->BcForm->error('message') ?><br>
 				<small>メッセージ中の「%l」は、エラー表示時にメールフィールドの項目名に変換されます。</small>
 			</td>
 		</tr>
 	</table>
-	<?= $this->BcForm->input('CraftFormRule.id', ['type' => 'hidden']) ?>
-	<?= $this->BcForm->input('CraftFormRule.type', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('CraftFormRule.id', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('CraftFormRule.type', ['type' => 'hidden']) ?>
 
 	<div class="submit">
 		<?php $this->BcBaser->link('一覧に戻る', ['action' => 'index'], ['class' => 'button']) ?>
-		<?= $this->BcForm->submit(
+		<?php echo $this->BcForm->submit(
 			'保存',
 			['div' => false, 'class' => 'button', 'id' => 'BtnSave', 'name' => 'save']
 		) ?>
 		<?php if ($this->action === 'admin_edit'): ?>
-			<?= $this->BcForm->submit(
+			<?php echo $this->BcForm->submit(
 				'削除',
 				['div' => false, 'class' => 'button', 'id' => 'BtnDelete', 'name' => 'delete']
 			) ?>
 		<?php endif ?>
 	</div>
-	<?= $this->BcForm->end() ?>
+	<?php echo $this->BcForm->end() ?>
 </div>
 

@@ -1,11 +1,11 @@
-<?= $this->BcBaser->css('CraftForm.admin/style') ?>
+<?php echo $this->BcBaser->css('CraftForm.admin/style') ?>
 
 <table class="list-table craft-form-list-table" id="ListTable">
 	<thead>
 		<tr>
 			<th class="list-tool">
 				<div>
-					<?php $this->BcBaser->link('＋新規追加', ['action' => 'add']) ?>　
+					<?php $this->BcBaser->link('＋新規追加', ['action' => 'add']) ?>
 				</div>
 			</th>
 			<th>
@@ -32,16 +32,16 @@
 						) ?>
 					</td>
 					<td>
-						<?= h($form['CraftFormForm']['url']); ?>
+						<?php echo h($form['CraftFormForm']['url']); ?>
 					</td>
 					<td>
-						<?= h($form['CraftFormForm']['title']); ?>
+						<?php echo h($form['CraftFormForm']['title']); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>
 		<?php else: ?>
 		<tr>
-			<td colspan="3"><p class="no-data"><?= __d('baser', 'データが見つかりませんでした。')?></p></td>
+			<td colspan="3"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
 	</tbody>

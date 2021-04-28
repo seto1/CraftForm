@@ -1,4 +1,4 @@
-<?= $this->BcBaser->css('CraftForm.admin/style') ?>
+<?php echo $this->BcBaser->css('CraftForm.admin/style') ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table craft-form-list-table" id="ListTable">
 	<thead>
@@ -25,13 +25,13 @@
 					) ?>
 				</td>
 				<td>
-					<?= h(CakeText::truncate($mail['CraftFormMail']['message'], 100)); ?>
+					<?php echo h(CakeText::truncate($mail['CraftFormMail']['message'], 100)); ?>
 				</td>
 				<td>
-					<?= h($mail['CraftFormMail']['ip']); ?>
+					<?php echo h($mail['CraftFormMail']['ip']); ?>
 				</td>
 				<td>
-					<?= h($mail['CraftFormMail']['created']); ?>
+					<?php echo h($mail['CraftFormMail']['created']); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
@@ -39,7 +39,7 @@
 		<tr>
 			<td colspan="3">
 				<p class="no-data">
-					<?= __d('baser', 'データが見つかりませんでした。')?>
+					<?php echo __d('baser', 'データが見つかりませんでした。')?>
 				</p>
 			</td>
 		</tr>

@@ -1,4 +1,4 @@
-<?= $this->BcBaser->css('CraftForm.admin/style') ?>
+<?php echo $this->BcBaser->css('CraftForm.admin/style') ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 <div id="craftform-blueprint-form">
 
-<?= $this->BcForm->create('CraftForm.CraftFormForm') ?>
+<?php echo $this->BcForm->create('CraftForm.CraftFormForm') ?>
 
 	<?php if ($this->action === 'admin_edit'): ?>
 		<table class="form-table">
@@ -23,7 +23,7 @@ $(document).ready(function(){
 						<input
 							type="text"
 							class="craft-form-short-code"
-							value="[CraftForm.getForm <?= $this->request->data['CraftFormForm']['id'] ?>]"
+							value="[CraftForm.getForm <?php echo $this->request->data['CraftFormForm']['id'] ?>]"
 							readonly
 						>
 					</label><br>
@@ -37,91 +37,91 @@ $(document).ready(function(){
 	<table class="form-table">
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.title', 'タイトル') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.title', 'タイトル') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.title', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.title') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.title', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.title') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.blueprint_input', '入力画面') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.blueprint_input', '入力画面') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.blueprint_input', ['type' => 'textarea']) ?>
-				<?= $this->BcForm->error('CraftFormForm.blueprint_input') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.blueprint_input', ['type' => 'textarea']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.blueprint_input') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_title', 'メールタイトル') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_title', 'メールタイトル') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_title', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_title') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_title', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_title') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_to', '送信先 to') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_to', '送信先 to') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_to', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_to') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_to', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_to') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_cc', '送信先 cc') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_cc', '送信先 cc') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_cc', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_cc') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_cc', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_cc') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_bcc', '送信先 bcc') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_bcc', '送信先 bcc') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_bcc', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_bcc') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_bcc', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_bcc') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_from', '差出人 メールアドレス') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_from', '差出人 メールアドレス') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_from', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_from') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_from', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_from') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.mail_from_name', '差出人 名前') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.mail_from_name', '差出人 名前') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.mail_from_name', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.mail_from_name') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.mail_from_name', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.mail_from_name') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.form_rule', 'フォームルール') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.form_rule', 'フォームルール') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.form_rule', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.form_rule') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.form_rule', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.form_rule') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.status', '公開状態') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.status', '公開状態') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input(
+				<?php echo $this->BcForm->input(
 					'CraftFormForm.status',
 					[
 						'type' => 'radio',
@@ -129,7 +129,7 @@ $(document).ready(function(){
 						'default' => 1
 					]
 				) ?>
-				<?= $this->BcForm->error('CraftFormForm.status') ?>
+				<?php echo $this->BcForm->error('CraftFormForm.status') ?>
 			</td>
 		</tr>
 	</table>
@@ -138,48 +138,48 @@ $(document).ready(function(){
 	<table class="form-table">
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.message_success', '送信完了時') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.message_success', '送信完了時') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.message_success', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.message_success') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.message_success', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.message_success') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.message_failed', '送信失敗時') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.message_failed', '送信失敗時') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.message_failed', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.message_failed') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.message_failed', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.message_failed') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?= $this->BcForm->label('CraftFormForm.message_validation_error', '入力内容に問題があった場合') ?>
+				<?php echo $this->BcForm->label('CraftFormForm.message_validation_error', '入力内容に問題があった場合') ?>
 			</th>
 			<td class="col-input">
-				<?= $this->BcForm->input('CraftFormForm.message_validation_error', ['type' => 'text']) ?>
-				<?= $this->BcForm->error('CraftFormForm.message_validation_error') ?>
+				<?php echo $this->BcForm->input('CraftFormForm.message_validation_error', ['type' => 'text']) ?>
+				<?php echo $this->BcForm->error('CraftFormForm.message_validation_error') ?>
 			</td>
 		</tr>
 	</table>
 
-	<?= $this->BcForm->input('CraftFormForm.id', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('CraftFormForm.id', ['type' => 'hidden']) ?>
 
 	<div class="submit">
 		<?php $this->BcBaser->link('一覧に戻る', ['action' => 'index'], ['class' => 'button']) ?>
-		<?= $this->BcForm->submit(
+		<?php echo $this->BcForm->submit(
 			'保存',
 			['div' => false, 'class' => 'button', 'id' => 'BtnSave', 'name' => 'save']
 		) ?>
 		<?php if ($this->action === 'admin_edit'): ?>
-			<?= $this->BcForm->submit(
+			<?php echo $this->BcForm->submit(
 				'削除',
 				['div' => false, 'class' => 'button', 'id' => 'BtnDelete', 'name' => 'delete']
 			) ?>
 		<?php endif ?>
 	</div>
 
-	<?= $this->BcForm->end() ?>
+	<?php echo $this->BcForm->end() ?>
 </div>
