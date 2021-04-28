@@ -20,7 +20,7 @@ class CraftFormRulesController extends AppController {
 	}
 
 	public function admin_add() {
-		if (!$this->request->data('CraftFormRule')) {
+		if (!$this->request->is('post') || !$this->request->data('CraftFormRule')) {
 			$this->render('form');
 			return;
 		}

@@ -23,7 +23,7 @@ class CraftFormMailsController extends AppController {
 	}
 
 	public function admin_add() {
-		if (!$this->request->data('CraftFormMail')) {
+		if (!$this->request->is('post') || !$this->request->data('CraftFormMail')) {
 			$this->render('form');
 			return;
 		}
@@ -42,7 +42,7 @@ class CraftFormMailsController extends AppController {
 	}
 
 	public function admin_edit($id) {
-		if (!empty($this->request->data('CraftFormMail'))) {
+		if ($this->request->is('post') && !empty($this->request->data('CraftFormMail'))) {
 			if (isset($this->request->data['delete'])) {
 				$this->delete($this->request->data('CraftFormMail.id'));
 			}
